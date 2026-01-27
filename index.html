@@ -331,11 +331,11 @@
         <div class="metric-guide">
             <h3>📊 Metric Guide</h3>
             <div class="metric-guide-grid">
-                <div><strong>CLIP T2I</strong>: Text-to-Image similarity. Higher = better semantic alignment.</div>
-                <div><strong>CLIP I2I</strong>: Image-to-Image similarity (0-1). Higher = closer to ground truth.</div>
-                <div><strong>HPSv2</strong>: Human Preference Score. Higher = more aesthetically pleasing.</div>
-                <div><strong>MSE</strong>: Mean Squared Error. Lower = more pixel-accurate.</div>
-                <div><strong>Code Length</strong>: SVG code size. Lower = more compact.</div>
+                <div><strong>CLIP T2I ↑</strong>: Text-to-Image similarity. Higher = better semantic alignment.</div>
+                <div><strong>CLIP I2I ↑</strong>: Image-to-Image similarity (0-1). Higher = closer to ground truth.</div>
+                <div><strong>HPSv2 ↑</strong>: Human Preference Score. Higher = more aesthetically pleasing.</div>
+                <div><strong>MSE ↓</strong>: Mean Squared Error. Lower = more pixel-accurate.</div>
+                <div><strong>Code Length ↓</strong>: SVG code size. Lower = more compact.</div>
             </div>
             <p class="keyboard-hint">Tip: Use <kbd>←</kbd> <kbd>→</kbd> to switch images, <kbd>1</kbd>-<kbd>4</kbd> to switch tasks</p>
         </div>
@@ -547,11 +547,11 @@ function metrics(d, useRelative = false, methodKey = '') {
     if (!d?.valid) return `<div class="metrics"><div class="metric full-width"><span class="metric-label">Status</span><span class="metric-value">Invalid / N/A</span></div></div>`;
     const c = useRelative ? (m) => clsRel(m, methodKey) : (m) => clsAbs(m, d[m]);
     return `<div class="metrics">
-        <div class="metric"><span class="metric-label">CLIP T2I</span><span class="metric-value ${c('clip_t2i')}">${fmt(d.clip_t2i)}</span></div>
-        <div class="metric"><span class="metric-label">CLIP I2I</span><span class="metric-value ${c('clip_i2i')}">${fmt(d.clip_i2i,3)}</span></div>
-        <div class="metric"><span class="metric-label">HPSv2</span><span class="metric-value ${c('hpsv2')}">${fmt(d.hpsv2,3)}</span></div>
-        <div class="metric"><span class="metric-label">MSE</span><span class="metric-value ${c('mse')}">${fmt(d.mse,4)}</span></div>
-        <div class="metric full-width"><span class="metric-label">Code Length</span><span class="metric-value ${c('code_length')}">${d.code_length?d.code_length.toLocaleString():'—'}</span></div>
+        <div class="metric"><span class="metric-label">CLIP T2I ↑</span><span class="metric-value ${c('clip_t2i')}">${fmt(d.clip_t2i)}</span></div>
+        <div class="metric"><span class="metric-label">CLIP I2I ↑</span><span class="metric-value ${c('clip_i2i')}">${fmt(d.clip_i2i,3)}</span></div>
+        <div class="metric"><span class="metric-label">HPSv2 ↑</span><span class="metric-value ${c('hpsv2')}">${fmt(d.hpsv2,3)}</span></div>
+        <div class="metric"><span class="metric-label">MSE ↓</span><span class="metric-value ${c('mse')}">${fmt(d.mse,4)}</span></div>
+        <div class="metric full-width"><span class="metric-label">Code Length ↓</span><span class="metric-value ${c('code_length')}">${d.code_length?d.code_length.toLocaleString():'—'}</span></div>
     </div>`;
 }
 
