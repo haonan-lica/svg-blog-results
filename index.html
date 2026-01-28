@@ -157,7 +157,7 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
         .results-container { display: grid; gap: 1.5rem; }
-        .results-container.view-all { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .results-container.view-all { grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); }
         .results-container.view-single { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
         .method-card {
             background: var(--bg-secondary);
@@ -543,11 +543,12 @@ function clsRel(metric, methodKey) {
 
 function path(method, variant, image) { return getImg(`evaluation_results/rendered/${method}/${variant}/${image}.png`); }
 
-function metrics(d, useRelative = false, methodKey = '') {
+function metrics(d, useRelative = false, methodKey = '', variant = '') {
     if (!d?.valid) return `<div class="metrics"><div class="metric full-width"><span class="metric-label">Status</span><span class="metric-value">Invalid / N/A</span></div></div>`;
     const c = useRelative ? (m) => clsRel(m, methodKey) : (m) => clsAbs(m, d[m]);
+    const showClipT2I = variant !== 'img-only';
     return `<div class="metrics">
-        <div class="metric"><span class="metric-label">CLIP T2I ↑</span><span class="metric-value ${c('clip_t2i')}">${fmt(d.clip_t2i)}</span></div>
+        ${showClipT2I ? `<div class="metric"><span class="metric-label">CLIP T2I ↑</span><span class="metric-value ${c('clip_t2i')}">${fmt(d.clip_t2i)}</span></div>` : ''}
         <div class="metric"><span class="metric-label">CLIP I2I ↑</span><span class="metric-value ${c('clip_i2i')}">${fmt(d.clip_i2i,3)}</span></div>
         <div class="metric"><span class="metric-label">HPSv2 ↑</span><span class="metric-value ${c('hpsv2')}">${fmt(d.hpsv2,3)}</span></div>
         <div class="metric"><span class="metric-label">MSE ↓</span><span class="metric-value ${c('mse')}">${fmt(d.mse,4)}</span></div>
@@ -567,7 +568,7 @@ function renderAll() {
             const vc = v==='img+text'?'img-text':v, vl = v==='text-only'?'Text→SVG':v==='img-only'?'Img→SVG':'Both→SVG';
             h += `<div class="variant-column"><div class="variant-label ${vc}">${vl}</div><div class="result-img-container ${!has||!ok?'unavailable-container':''}">`;
             h += has&&ok ? `<img src="${path(k,v,currentImage)}" class="result-img">` : `<span class="unavailable">${has?'Invalid':'N/A'}</span>`;
-            h += `</div>${has?metrics(d, false, k):'<div class="metrics"><div class="metric full-width"><span class="metric-label">Status</span><span class="metric-value">—</span></div></div>'}</div>`;
+            h += `</div>${has?metrics(d, false, k, v):'<div class="metrics"><div class="metric full-width"><span class="metric-label">Status</span><span class="metric-value">—</span></div></div>'}</div>`;
         }
         h += `</div></div>`;
     }
@@ -585,7 +586,7 @@ function renderSingle(task) {
         const has = m.variants.includes(task), mm = metricsData[currentImage][k] || {}, d = mm[task], ok = d?.valid;
         h += `<div class="single-result-card ${!has||!ok?'unavailable-card':''}"><div class="method-name">${m.name}</div><div class="result-img-container ${!has||!ok?'unavailable-container':''}">`;
         h += has&&ok ? `<img src="${path(k,task,currentImage)}" class="result-img">` : `<span class="unavailable">${has?'Invalid SVG':'Not Available'}</span>`;
-        h += `</div>${has?metrics(d, true, k):'<div class="metrics"><div class="metric full-width"><span class="metric-label">Status</span><span class="metric-value">—</span></div></div>'}</div>`;
+        h += `</div>${has?metrics(d, true, k, task):'<div class="metrics"><div class="metric full-width"><span class="metric-label">Status</span><span class="metric-value">—</span></div></div>'}</div>`;
     }
     c.innerHTML = h;
 }
